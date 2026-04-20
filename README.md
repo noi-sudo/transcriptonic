@@ -81,3 +81,19 @@ The transcript may not always be accurate and is only intended to aid in improvi
 
 <br />
 <br />
+
+# Development
+
+## Building the extension
+To build the extension for both Chrome and Firefox, you need to have Node.js installed.
+
+1. Run the build script:
+   ```bash
+   npm run build
+   ```
+
+The build artifacts will be located in the `dist/` directory:
+- `dist/chrome/`: Unpacked Chrome extension
+- `dist/firefox/`: Unpacked Firefox extension
+- `dist/transcriptonic-chrome.zip`: Packaged Chrome extension
+- `dist/transcriptonic-firefox.zip`: Packaged Firefox extension
