@@ -1,0 +1,12 @@
+{
+  "name": "transcriptonic",
+  "version": "3.3.1",
+  "description": "Simple Google Meet transcripts. Private and open source.",
+  "scripts": {
+    "build": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "archiver": "^7.0.1",
+    "fs-extra": "^11.2.0"
+  }
+}
