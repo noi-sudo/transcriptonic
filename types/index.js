@@ -124,9 +124,11 @@
 
 /**
  * @typedef {Object} ExtensionMessage Message sent by the calling script
- * @property {"new_meeting_started" | "meeting_ended" | "download_transcript_at_index" | "post_webhook_at_index" | "recover_last_meeting" | "get_platform_status" | "enable_platform" | "disable_platform" | "open_popup"} type type of message
+ * @property {"new_meeting_started" | "meeting_ended" | "download_transcript_at_index" | "post_webhook_at_index" | "recover_last_meeting" | "get_platform_status" | "enable_platform" | "disable_platform" | "open_popup" | "download_transcript_blob"} type type of message
  * @property {number} [index] index of the meeting to process
  * @property {Platform} [platform] index of the meeting to process
+ * @property {string} [fileName] name of the file to download
+ * @property {string} [blobContent] content of the file to download
 */
 
 /**
