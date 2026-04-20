@@ -402,3 +402,22 @@ function getDuration(meetingStartTimestamp, meetingEndTimestamp) {
         ? `${durationHours}h ${remainingMinutes}m`
         : `${durationMinutes}m`
 }
+
+// Firefox does not support chrome.downloads.download with a data URL from background script. So, we handle it here in the foreground page.
+// @ts-ignore
+const isFirefox = typeof browser !== 'undefined' && /firefox/i.test(navigator.userAgent)
+if (isFirefox) {
+    chrome.runtime.onMessage.addListener(function (messageUnTyped, sender, sendResponse) {
+        const message = /** @type {ExtensionMessage} */ (messageUnTyped)
+        if (message.type === "download_transcript_blob") {
+            const blob = new Blob([message.blobContent || ""], { type: "text/plain" })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.href = url
+            a.download = message.fileName || "transcript.txt"
+            a.click()
+            URL.revokeObjectURL(url)
+            window.focus()
+        }
+    })
+}

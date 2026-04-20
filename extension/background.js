@@ -466,6 +466,35 @@ function downloadTranscript(index, isWebhookEnabled) {
                 content += "Transcript saved using TranscripTonic Chrome extension (https://chromewebstore.google.com/detail/ciepnfnceimjehngolkijpnbappkkiag)"
                 content += "\n---------------"
 
+                // Firefox does not support chrome.downloads.download with a data URL from background script. So, we handle it by sending a message to a foreground page.
+                // @ts-ignore
+                const isFirefox = typeof browser !== 'undefined' && /firefox/i.test(navigator.userAgent)
+                if (isFirefox) {
+                    chrome.tabs.query({ url: chrome.runtime.getURL("meetings.html") }, function (tabs) {
+                        if (tabs.length > 0) {
+                            chrome.tabs.sendMessage(tabs[0].id, {
+                                type: "download_transcript_blob",
+                                fileName: fileName,
+                                blobContent: content
+                            })
+                            resolve("Transcript download initiated")
+                        } else {
+                            chrome.tabs.create({ url: "meetings.html" }, function (tab) {
+                                // Give it some time to load
+                                setTimeout(() => {
+                                    chrome.tabs.sendMessage(tab.id, {
+                                        type: "download_transcript_blob",
+                                        fileName: fileName,
+                                        blobContent: content
+                                    })
+                                    resolve("Transcript download initiated")
+                                }, 1000)
+                            })
+                        }
+                    })
+                    return
+                }
+
                 const blob = new Blob([content], { type: "text/plain" })
 
                 // Read the blob as a data URL
